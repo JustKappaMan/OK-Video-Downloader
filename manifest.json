@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "OK Video Downloader",
+  "version": "0.0.1",
+  "permissions": ["activeTab", "scripting"],
+  "action": {},
+  "background": {
+    "service_worker": "service-worker.js"
+  }
+}
