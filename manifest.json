@@ -1,10 +1,25 @@
 {
   "manifest_version": 3,
   "name": "OK Video Downloader",
-  "version": "0.0.1",
-  "permissions": ["activeTab", "scripting"],
+  "version": "1.0.0",
+  "description": "Скачивайте видео из веб-версии OK в желаемом качестве",
+  "permissions": ["activeTab"],
   "action": {},
-  "background": {
-    "service_worker": "service-worker.js"
-  }
+  "content_scripts": [
+    {
+      "js": ["scripts/content-script.js"],
+      "matches": ["https://ok.ru/*"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "author": {
+    "email": "volozhaninkirill@gmail.com"
+  },
+  "homepage_url": "https://github.com/JustKappaMan/OK-Video-Downloader"
 }
