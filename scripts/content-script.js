@@ -14,23 +14,34 @@ new MutationObserver(() => {
       }
     }, 100);
   }
-}).observe(document, {
-  subtree: true,
-  childList: true
-});
+}).observe(document, { subtree: true, childList: true });
 
 function main() {
   if (!document.querySelector('#okVideoDownloaderPanel')) {
-    showPanel(createDownloadPanel(getSources()));
+    const sources = getSources();
+    if (Object.keys(sources).length) {
+      showPanel(createDownloadPanel(sources));
+    } else {
+      showPanel(createErrorPanel());
+    }
   }
 }
 
 function getSources() {
-  const videoPlayer = document.querySelector('div[data-module="OKVideo"]');
-  const videoPlayerInfo = JSON.parse(decodeURIComponent(videoPlayer.getAttribute('data-options')));
-  const videoPlayerMetadata = JSON.parse(decodeURIComponent(videoPlayerInfo.flashvars.metadata));
-
   let sources = {};
+
+  const videoPlayer = document.querySelector('div[data-module="OKVideo"]');
+  const videoPlayerInfo = JSON.parse(
+    decodeURIComponent(videoPlayer.getAttribute('data-options'))
+  );
+  const videoPlayerMetadata = JSON.parse(
+    decodeURIComponent(videoPlayerInfo.flashvars.metadata)
+  );
+
+  // If video is embedded from a third party site
+  if ('originalUrl' in videoPlayerMetadata.movie) {
+    return sources;
+  }
 
   for (const video of videoPlayerMetadata.videos) {
     switch (video.name) {
@@ -76,6 +87,22 @@ function createDownloadPanel(sources) {
     aTag.style.margin = '0 2px';
     panel.appendChild(aTag);
   }
+
+  return panel;
+}
+
+function createErrorPanel() {
+  const label = document.createElement('span');
+  label.innerText =
+    'Видео со стороннего сайта. Воспользуйтесь инструментами для скачивания с исходного сайта.';
+  label.style.color = '#f00';
+  label.style.margin = '0 2px 0 0';
+
+  const panel = document.createElement('div');
+  panel.id = 'okVideoDownloaderPanel';
+  panel.style.margin = '8px 12px 0';
+  panel.style.fontSize = '14px';
+  panel.appendChild(label);
 
   return panel;
 }
