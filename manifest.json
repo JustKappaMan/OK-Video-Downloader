@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "OK Video Downloader",
-  "version": "1.0.2",
-  "description": "Скачивайте видео из веб-версии OK в желаемом качестве",
+  "version": "1.0.3",
+  "description": "Скачивайте видео с сайта «Одноклассники» в желаемом качестве",
   "permissions": ["activeTab"],
   "action": {},
   "content_scripts": [

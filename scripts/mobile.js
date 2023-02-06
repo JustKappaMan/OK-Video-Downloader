@@ -18,9 +18,10 @@ new MutationObserver(() => {
 
 function main() {
   if (!document.querySelector('#okVideoDownloaderPanel')) {
-    // If video is embedded from a third party site
+    // If a video is embedded from a third party site
     if (document.querySelector('#mvplayer_cont div.js-nav-tmp')) {
       showPanel(createErrorPanel());
+      // If a video is uploaded to Odnoklassniki directly
     } else {
       showPanel(createDownloadPanel(getVideoSource()));
     }

@@ -18,17 +18,19 @@ new MutationObserver(() => {
 
 function main() {
   if (!document.querySelector('#okVideoDownloaderPanel')) {
-    const sources = getSources();
-    if (Object.keys(sources).length) {
-      showPanel(createDownloadPanel(sources));
+    const videoSources = getVideoSources();
+    // If a video is uploaded to Odnoklassniki directly
+    if (Object.keys(videoSources).length) {
+      showPanel(createDownloadPanel(videoSources));
+      // If a video is embedded from a third party site
     } else {
       showPanel(createErrorPanel());
     }
   }
 }
 
-function getSources() {
-  let sources = {};
+function getVideoSources() {
+  let videoSources = {};
 
   const videoPlayer = document.querySelector('div[data-module="OKVideo"]');
   const videoPlayerInfo = JSON.parse(
@@ -38,38 +40,38 @@ function getSources() {
     decodeURIComponent(videoPlayerInfo.flashvars.metadata)
   );
 
-  // If video is embedded from a third party site
+  // If a video is embedded from a third party site
   if ('originalUrl' in videoPlayerMetadata.movie) {
-    return sources;
+    return videoSources;
   }
 
   for (const video of videoPlayerMetadata.videos) {
     switch (video.name) {
       case 'mobile':
-        sources['144p'] = video.url;
+        videoSources['144p'] = video.url;
         break;
       case 'lowest':
-        sources['240p'] = video.url;
+        videoSources['240p'] = video.url;
         break;
       case 'low':
-        sources['360p'] = video.url;
+        videoSources['360p'] = video.url;
         break;
       case 'sd':
-        sources['480p'] = video.url;
+        videoSources['480p'] = video.url;
         break;
       case 'hd':
-        sources['720p'] = video.url;
+        videoSources['720p'] = video.url;
         break;
       case 'full':
-        sources['Original'] = video.url;
+        videoSources['Original'] = video.url;
         break;
     }
   }
 
-  return sources;
+  return videoSources;
 }
 
-function createDownloadPanel(sources) {
+function createDownloadPanel(videoSources) {
   const label = document.createElement('span');
   label.innerText = 'Скачать:';
   label.style.margin = '0 2px 0 0';
@@ -80,7 +82,7 @@ function createDownloadPanel(sources) {
   panel.style.fontSize = '14px';
   panel.appendChild(label);
 
-  for (const [quality, url] of Object.entries(sources)) {
+  for (const [quality, url] of Object.entries(videoSources)) {
     const aTag = document.createElement('a');
     aTag.href = url;
     aTag.innerText = quality;
@@ -96,7 +98,7 @@ function createErrorPanel() {
   label.innerText =
     'Видео со стороннего сайта. Воспользуйтесь инструментами для скачивания с исходного сайта.';
   label.style.color = '#f00';
-  label.style.margin = '0 2px 0 0';
+  label.style.marginRight = '2px';
 
   const panel = document.createElement('div');
   panel.id = 'okVideoDownloaderPanel';
