@@ -8,7 +8,10 @@ new MutationObserver(() => {
   }
   if (location.pathname.includes('/video/')) {
     const checker = setInterval(() => {
-      if (document.querySelector('div.vp_video')) {
+      if (
+        document.querySelector('div.vp_video') &&
+        !document.querySelector('#okVideoDownloaderPanel')
+      ) {
         clearInterval(checker);
         main();
       }
@@ -17,15 +20,13 @@ new MutationObserver(() => {
 }).observe(document, { subtree: true, childList: true });
 
 function main() {
-  if (!document.querySelector('#okVideoDownloaderPanel')) {
-    const videoSources = getVideoSources();
-    // If a video is uploaded to Odnoklassniki directly
-    if (Object.keys(videoSources).length) {
-      showPanel(createDownloadPanel(videoSources));
-      // If a video is embedded from a third party site
-    } else {
-      showPanel(createErrorPanel());
-    }
+  const videoSources = getVideoSources();
+  // Если видео встроено со стороннего сайта
+  if (Object.keys(videoSources).length) {
+    showPanel(createDownloadPanel(videoSources));
+    // Если видео загружено напрямую в «Одноклассники»
+  } else {
+    showPanel(createErrorPanel());
   }
 }
 
@@ -40,7 +41,7 @@ function getVideoSources() {
     decodeURIComponent(videoPlayerInfo.flashvars.metadata)
   );
 
-  // If a video is embedded from a third party site
+  // Если видео встроено со стороннего сайта
   if ('originalUrl' in videoPlayerMetadata.movie) {
     return videoSources;
   }

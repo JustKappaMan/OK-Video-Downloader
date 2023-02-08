@@ -8,7 +8,10 @@ new MutationObserver(() => {
   }
   if (location.search.includes('?st.cmd=movieLayer')) {
     const checker = setInterval(() => {
-      if (document.querySelector('#mvplayer_cont')) {
+      if (
+        document.querySelector('#mvplayer_cont') &&
+        !document.querySelector('#okVideoDownloaderPanel')
+      ) {
         clearInterval(checker);
         main();
       }
@@ -17,14 +20,12 @@ new MutationObserver(() => {
 }).observe(document, { subtree: true, childList: true });
 
 function main() {
-  if (!document.querySelector('#okVideoDownloaderPanel')) {
-    // If a video is embedded from a third party site
-    if (document.querySelector('#mvplayer_cont div.js-nav-tmp')) {
-      showPanel(createErrorPanel());
-      // If a video is uploaded to Odnoklassniki directly
-    } else {
-      showPanel(createDownloadPanel(getVideoSource()));
-    }
+  // Если видео встроено со стороннего сайта
+  if (document.querySelector('#mvplayer_cont div.js-nav-tmp')) {
+    showPanel(createErrorPanel());
+    // Если видео загружено напрямую в «Одноклассники»
+  } else {
+    showPanel(createDownloadPanel(getVideoSource()));
   }
 }
 
