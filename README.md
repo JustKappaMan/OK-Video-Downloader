@@ -1,4 +1,6 @@
 # OK Video Downloader
+![MIT License](https://img.shields.io/github/license/JustKappaMan/OK-Video-Downloader)
+
 Скачивайте видео с сайта «Одноклассники» в желаемом качестве.
 ## Информация о лицензии
 Продукт распространяется под лицензией MIT.
