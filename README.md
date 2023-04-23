@@ -1,6 +1,7 @@
 # OK Video Downloader
 ![MIT License](https://img.shields.io/github/license/JustKappaMan/OK-Video-Downloader)
 ![Version 1.0.5](https://img.shields.io/badge/version-1.0.5-blue)
+![Checked with ESLint](https://img.shields.io/badge/ESLint-checked-blueviolet)
 
 Скачивайте видео с сайта «Одноклассники» в желаемом качестве.
 ## Информация о лицензии
